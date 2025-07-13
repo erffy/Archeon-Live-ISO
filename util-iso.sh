@@ -57,10 +57,12 @@ trap_exit() {
 
 generate_motd() {
     cat << 'EOF' > ${src_dir}/archiso/airootfs/etc/motd
-This ISO is based on ArchLinux ISO modified to provide Installation Environment for [38;2;23;147;209mCachyOS[0m.
-https://cachyos.org
+This ISO is based on CachyOS Live ISO modified to provide Installation Environment for [38;2;112;48;160mArcheon[0m.
 
-CachyOS Archiso Sources:
+Archeon Live ISO:
+https://github.com/erffy/Archeon-Live-ISO
+
+CachyOS Live ISO:
 https://github.com/cachyos/cachyos-live-iso
 
 ArchLinux ISO Source:
@@ -69,13 +71,11 @@ https://gitlab.archlinux.org/archlinux/archiso
 Calamares is used as GUI installer:
 https://github.com/calamares/calamares
 
-Live environment will start now and let you install [38;2;23;147;209mCachyOS[0m to disk.
+Live environment will start now and let you install [38;2;112;48;160mArcheon[0m to disk.
 
-Getting help at the forum: https://discuss.cachyos.org
+Welcome to your [38;2;112;48;160mArcheon[0m!
 
-Welcome to your [38;2;23;147;209mCachyOS[0m!
-
-[41m [41m [41m [40m [44m [40m [41m [46m [45m [41m [46m [43m [41m [44m [45m [40m [44m [40m [41m [44m [41m [41m [46m [42m [41m [44m [43m [41m [45m [40m [40m [44m [40m [41m [44m [42m [41m [46m [44m [41m [46m [47m [0m
+[40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [40m [45m [0m
 EOF
 }
 
@@ -188,7 +188,7 @@ run_build() {
     sudo chown $USER $outFolder
 
     cp ${work_dir}/iso/arch/pkglist.x86_64.txt "$outFolder/$_profile/$(gen_iso_fn).pkgs.txt"
-    mv "$outFolder/$_profile/cachyos-$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)-x86_64.iso" "$outFolder/$_profile/${iso_file}"
+    mv "$outFolder/$_profile/archeon-$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)-x86_64.iso" "$outFolder/$_profile/${iso_file}"
 
     msg "Done [Build ISO] ${iso_file}"
     msg "Finished building [%s]" "${_profile}"
@@ -216,7 +216,7 @@ run_build() {
 
 gen_iso_fn(){
     local vars=() name
-    vars+=("cachyos")
+    vars+=("archeon")
     [[ -n ${profile} ]] && vars+=("${profile}")
 
     vars+=("linux")

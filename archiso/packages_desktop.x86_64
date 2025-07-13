@@ -19,6 +19,8 @@ procps-ng
 util-linux
 edk2-shell
 syslinux
+memtest86+
+memtest86+-efi
 
 # --- Boot / Filesystems ---
 btrfs-progs
@@ -44,6 +46,7 @@ spectacle
 dolphin
 xdg-user-dirs-gtk
 xdg-utils
+sddm
 
 # --- Audio (PipeWire Stack) ---
 pipewire
