@@ -1,0 +1,44 @@
+name: Archeon Monthly Rework Build
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build ISO in privileged Arch container
+        run: |
+          docker run --rm --privileged \
+            -v ${{ github.workspace }}:/work \
+            -w /work \
+            archlinux:latest bash -c "
+              pacman -Syu --noconfirm base-devel git archiso squashfs-tools &&
+              chmod +x ./buildiso.sh &&
+              ./buildiso.sh &&
+              cd out/desktop &&
+              for iso in *.iso; do sha256sum \"\$iso\" > \"\$iso.sha256\"; done
+            "
+
+      - name: Set release info
+        id: set_release
+        run: |
+          echo "title=$(date +'%B %Y')" >> "$GITHUB_OUTPUT"
+          echo "tag=$(date +'%B.%Y' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Upload release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.set_release.outputs.title }}
+          tag_name: ${{ steps.set_release.outputs.tag }}
+          prerelease: true
+          body: 'Archeon Rework Build'
+          files: |
+            out/desktop/*.iso
+            out/desktop/*.sha256

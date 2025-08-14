@@ -1,0 +1,128 @@
+command_timeout = 3000
+
+[username]
+format = "[$user]($style)@"
+show_always = true
+style_root = "bold red"
+style_user = "bold blue"
+
+[hostname]
+disabled = false
+format = "[$hostname]($style) in "
+ssh_only = false
+style = "dimmed lavender"
+trim_at = "-"
+
+[directory]
+style = "mauve"
+read_only = " "
+truncation_length = 4
+truncate_to_repo = true
+truncation_symbol = "repo:/"
+home_symbol = "~"
+
+[sudo]
+disabled = false
+style = "bold red"
+symbol = " "
+
+[git_branch]
+symbol = " "
+style = "bold lavender"
+
+[git_status]
+style = "dimmed sky"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕ ⇡${ahead_count} ⇣${behind_count}"
+deleted = "✖"
+modified = "✱"
+staged = "●"
+untracked = "…"
+
+[cmd_duration]
+disabled = false
+min_time = 500
+format = "took [$duration]($style)"
+style = "bold peach"
+
+[battery]
+charging_symbol = ""
+discharging_symbol = ""
+full_symbol = ""
+
+[[battery.display]]
+threshold = 15
+style = "bold red"
+
+[[battery.display]]
+threshold = 50
+style = "bold peach"
+
+[[battery.display]]
+threshold = 80
+style = "bold green"
+
+[time]
+disabled = true
+format = "🕒 [$time]($style)"
+style = "dimmed subtext1"
+time_format = "%H:%M:%S"
+
+[character]
+error_symbol = "[❯](red)"
+success_symbol = "[❯](blue)"
+
+[status]
+disabled = false
+format = '[\[$symbol$status\]]($style) '
+symbol = "✖"
+style = "bold red"
+map_symbol = true
+pipestatus = true
+
+# Language & Runtime Symbols
+[aws]
+symbol = " "
+[conda]
+symbol = " "
+[dart]
+symbol = " "
+[docker_context]
+symbol = " "
+style = "blue"
+[elixir]
+symbol = " "
+[elm]
+symbol = " "
+[golang]
+symbol = " "
+[hg_branch]
+symbol = " "
+[java]
+symbol = " "
+[julia]
+symbol = " "
+[nim]
+symbol = " "
+[nix_shell]
+symbol = " "
+[nodejs]
+symbol = " "
+style = "green"
+[package]
+symbol = " "
+[perl]
+symbol = " "
+[php]
+symbol = " "
+[python]
+symbol = " "
+style = "yellow"
+[ruby]
+symbol = " "
+[rust]
+symbol = " "
+style = "red"
+[swift]
+symbol = " "

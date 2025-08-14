@@ -1,0 +1,90 @@
+# Core
+base
+pv
+arch-install-scripts
+linux-cachyos
+cachyos-keyring
+archlinux-keyring
+mkinitcpio
+mkinitcpio-archiso
+syslinux
+memtest86+
+memtest86+-efi
+edk2-shell
+linux-firmware-intel
+linux-firmware-amdgpu
+linux-firmware-broadcom
+linux-firmware-realtek
+
+# Desktop Environment
+plasma-desktop
+polkit
+polkit-kde-agent
+kscreen
+konsole
+spectacle
+dolphin
+kde-gtk-config
+kcalc
+bluedevil
+kate
+
+# Display Manager
+sddm
+
+# Audio & Multimedia
+pipewire
+pipewire-jack
+pipewire-pulse
+pipewire-alsa
+wireplumber
+
+# Graphics Drivers & X/Wayland
+mesa
+xlibre-xserver
+xlibre-xserver-common
+xlibre-xf86-video-amdgpu
+xlibre-xf86-input-libinput
+xorg-xsetroot
+xorg-xinit
+xorg-xwayland
+
+# Fonts
+noto-fonts
+noto-color-emoji-fontconfig
+terminus-font
+ttf-fira-sans
+ttf-fira-mono
+ttf-fira-code
+ttf-liberation
+ttf-dejavu
+otf-font-awesome
+woff2-font-awesome
+
+# Microcode
+amd-ucode
+intel-ucode
+
+# Utilities & Tools
+fastfetch
+yay
+inxi
+fish
+vim
+chwd
+cachy-chroot
+starship
+xdg-user-dirs
+xdg-utils
+firefox-pure
+cachyos-rate-mirrors
+networkmanager
+btrfs-progs
+openssh
+bluez
+bluez-utils
+bluez-libs
+cachyos-mirrorlist
+irqbalance
+sudo
+cachyos-cli-installer-new

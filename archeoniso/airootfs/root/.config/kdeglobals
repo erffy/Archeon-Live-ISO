@@ -1,0 +1,18 @@
+[KDE]
+LookAndFeelPackage=Carl
+
+[General]
+ColorScheme=Carl
+Name=Carl
+IconTheme=kora
+widgetStyle=Carl
+
+font=Fira Sans,10,-1,5,50,0,0,0,0,0
+fixed=Fira Mono,10,-1,5,50,0,0,0,0,0
+menuFont=Fira Sans,10,-1,5,50,0,0,0,0,0
+smallestReadableFont=Fira Sans,8,-1,5,50,0,0,0,0,0
+toolBarFont=Fira Sans,10,-1,5,50,0,0,0,0,0
+
+[WM]
+activeFont=Fira Sans,10,-1,5,50,0,0,0,0,0
+inactiveFont=Fira Sans,10,-1,5,50,0,0,0,0,0

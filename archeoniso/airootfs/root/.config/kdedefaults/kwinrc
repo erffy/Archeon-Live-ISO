@@ -1,0 +1,7 @@
+[TabBox]
+LayoutName=preview_stack
+
+[org.kde.kdecoration2]
+NoPlugin=false
+library=org.kde.kwin.aurorae
+theme=__aurorae__svg__Carl

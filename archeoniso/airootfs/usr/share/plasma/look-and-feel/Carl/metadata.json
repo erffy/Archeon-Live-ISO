@@ -1,0 +1,32 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "gicalucejo@gmail.com",
+                "Name": "jomada"
+            }
+        ],
+        "Category": "Global Themes (Plasma 6)",
+        "ServiceTypes": [
+            "Plasma/LookAndFeel"
+        ],
+        "EnabledByDefault": true,
+        "Name": "Carl",
+        "Description": "Carl Desktop Design",
+        "Id": "Carl",
+        "Version": "2.2",
+        "License": "GPL 3+",
+        "Website": "https://seduccionlinux.wordpress.com",
+        "Keywords": "Desktop;Workspace;Appearance;Look and Feel;Logout;Lock;Suspend;Shutdown;Hibernate;",
+        "X-Plasma-APIVersion": "2"
+    },
+     "X-KPackage-Dependencies": [
+        "kns://colorschemes.knsrc/api.kde-look.org/1331616",
+        "kns://plasma-themes.knsrc/api.kde-look.org/1330604",
+        "kns://aurorae.knsrc/api.kde-look.org/1331617",
+        "kns://xcursor.knsrc/api.kde-look.org/1411743",
+        "kns://icons.knsrc/api.kde-look.org/1256209",
+        "kns://wallpaper.knsrc/api.kde-look.org/1682837"
+    ]
+}

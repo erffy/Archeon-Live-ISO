@@ -1,0 +1,10 @@
+NAME="Archeon"
+PRETTY_NAME="Archeon"
+ID=arch
+BUILD_ID=rolling
+ANSI_COLOR="38;2;88;0;128"
+HOME_URL="https://github.com/erffy/Archeon-Live-ISO"
+DOCUMENTATION_URL="https://github.com/erffy/Archeon-Live-ISO/wiki"
+SUPPORT_URL="https://github.com/erffy/Archeon-Live-ISO"
+BUG_REPORT_URL="https://github.com/erffy/Archeon-Live-ISO/issues"
+LOGO=arch
