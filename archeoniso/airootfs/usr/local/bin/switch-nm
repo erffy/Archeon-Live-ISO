@@ -1,3 +1,14 @@
 #!/usr/bin/bash
 
-systemctl stop systemd-networkd && systemctl start NetworkManager
+networkd=$(systemctl is-active --quiet systemd-networkd && echo true || echo false)
+if [ "$networkd" = true ]; then
+    systemctl stop systemd-networkd >/dev/null
+    systemctl start NetworkManager >/dev/null
+    switched="NetworkManager"
+else
+    systemctl stop NetworkManager >/dev/null
+    systemctl start systemd-networkd >/dev/null
+    switched="systemd-networkd"
+fi
+
+echo "Switched to $switched"
