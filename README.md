@@ -1,6 +1,3 @@
-> [!IMPORTANT]
-> This rework is still a **Work In Progress**. Use with caution.
-
 ## Archeon Live ISO
 
 This is the live ISO I’ve set up for myself, which I call **Archeon**.
