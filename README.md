@@ -13,7 +13,7 @@ sudo pacman -S --needed git archiso squashfs-tools
 #### 2. Clone Repository
 
 ```bash
-git clone -b rework https://github.com/erffy/Archeon-Live-ISO.git archeon && cd archeon
+git clone https://github.com/erffy/Archeon-Live-ISO.git archeon && cd archeon
 ```
 
 #### 3. Build ISO
