@@ -1,4 +1,4 @@
-name: Archeon Builds
+name: Archeon Build
 
 on:
   schedule:
@@ -37,8 +37,7 @@ jobs:
         with:
           name: ${{ steps.set_release.outputs.title }}
           tag_name: ${{ steps.set_release.outputs.tag }}
-          prerelease: true
-          body: 'Archeon Rework Build'
+          make_latest: true
           files: |
             out/desktop/*.iso
             out/desktop/*.sha256
