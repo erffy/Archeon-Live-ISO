@@ -20,4 +20,5 @@ file_permissions=(
   ["/etc/sudoers.d"]="0:0:750"
   ["/etc/sudoers.d/g_wheel"]="0:0:440"
   ["/root"]="0:0:750"
+  ["/usr/local/bin/switch-nm"]="0:0:755"
 )
