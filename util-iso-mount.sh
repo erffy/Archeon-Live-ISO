@@ -11,7 +11,7 @@
 
 umount_img() {
     if [[ -n ${IMG_ACTIVE_MOUNTS[@]} ]]; then
-        info "umount: [%s]" "${IMG_ACTIVE_MOUNTS[@]}"
+        log_info "umount: [%s]" "${IMG_ACTIVE_MOUNTS[@]}"
         sudo umount "${IMG_ACTIVE_MOUNTS[@]}"
         unset IMG_ACTIVE_MOUNTS
         rm -r "$1"
@@ -26,11 +26,11 @@ check_umount() {
 
 umount_fs(){
     if [[ -n ${FS_ACTIVE_MOUNTS[@]} ]]; then
-        info "overlayfs umount: [%s]" "${FS_ACTIVE_MOUNTS[@]}"
+        log_info "overlayfs umount: [%s]" "${FS_ACTIVE_MOUNTS[@]}"
         #umount "${FS_ACTIVE_MOUNTS[@]}"
         for i in "${FS_ACTIVE_MOUNTS[@]}"
         do
-            info "umount overlayfs: [%s]" "$i"
+            log_info "umount overlayfs: [%s]" "$i"
             check_umount $i
         done
         unset FS_ACTIVE_MOUNTS
@@ -39,7 +39,7 @@ umount_fs(){
     mount_folders=$(grep "${work_dir}" /proc/mounts | awk '{print$2}' | sort -r)
     for i in $mount_folders
     do
-        info "umount folder: [%s]" "$i"
+        log_info "umount folder: [%s]" "$i"
         check_umount $i
     done
 }

@@ -18,7 +18,7 @@ elapsed_time(){
 }
 
 show_elapsed_time(){
-    info "Time %s: %s minutes" "$1" "$(elapsed_time $2)"
+    log_info "Time %s: %s minutes" "$1" "$(elapsed_time $2)"
 }
 
 check_root(){
@@ -31,39 +31,40 @@ check_root(){
 }
 
 check_requirements() {
-    local package="archiso"
+    local packages=("archiso" "squashfs-tools")
     local helpers=("yay" "paru" "trizen")
 
-    if pacman -Qi $package &>/dev/null; then
-        echo "[ OK ] '$package' is already installed."
-        return
-    fi
+    for package in "${packages[@]}"; do
+        if pacman -Qi "$package" &>/dev/null; then
+            log_info "'$package' is already installed."
+            continue
+        fi
 
-    for helper in "${helpers[@]}"; do
-        if pacman -Qi $helper &>/dev/null; then
-            echo "────────────────────────────────────────────────────────────"
-            echo " Installing '$package' using: $helper"
-            echo "────────────────────────────────────────────────────────────"
-            case "$helper" in
-                yay|paru) $helper -S --noconfirm --needed $package ;;
-                trizen)   $helper -S --noconfirm --needed --noedit $package ;;
-            esac
-            break
+        local installed=false
+        for helper in "${helpers[@]}"; do
+            if pacman -Qi $helper &>/dev/null; then
+                log_note "Installing '$package' using: $helper"
+                case "$helper" in
+                    yay|paru) $helper -S --noconfirm --needed $package ;;
+                    trizen)   $helper -S --noconfirm --needed --noedit $package ;;
+                esac
+                installed=true
+                break
+            fi
+        done
+
+        if pacman -Qi $package &>/dev/null; then
+            log_info "Successfully installed '$package'."
+        else
+            log_error "Failed to install '$package'."
+            exit 1
         fi
     done
-
-    if pacman -Qi "$package" &>/dev/null; then
-        echo "[ OK ] Successfully installed '$package'."
-    else
-        echo "[ FAIL ] Failed to install '$package'."
-        exit 1
-    fi
 }
 
-prepare_dir(){
-    if [[ ! -d $1 ]]; then
-        mkdir -p $1
-    fi
+prepare_dir() {
+    local dir="$1"
+    [[ ! -d $dir ]] && mkdir -p $dir
 }
 
 load_vars() {
@@ -77,10 +78,10 @@ load_vars() {
     return 0
 }
 
-create_chksums() {
-    msg2 "creating checksums for [$1]"
-    sha1sum $1 > $1.sha1
+create_checksums() {
+    log_note "creating checksums for [$1]"
     sha256sum $1 > $1.sha256
+    md5sum $1 > $1.md5
 }
 
 sign_with_key() {
@@ -88,11 +89,11 @@ sign_with_key() {
     load_vars /etc/makepkg.conf
 
     if [ ! -e "$1" ]; then
-        error "%s does not exist!" "$1"
+        log_error "%s does not exist!" "$1"
         exit 1
     fi
 
-    msg2 "signing [%s] with key %s" "${1##*/}" "${GPGKEY}"
+    log_note "signing [%s] with key %s" "${1##*/}" "${GPGKEY}"
     [[ -e "$1".sig ]] && rm "$1".sig
 
     local SIGNWITHKEY=()

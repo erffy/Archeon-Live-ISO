@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; version 2 of the License.
@@ -11,93 +12,57 @@
 export LC_MESSAGES=C
 export LANG=C
 
-disable_colors(){
-    unset ALL_OFF BOLD BLUE GREEN RED YELLOW
+disable_colors() {
+    unset COLOR_RESET COLOR_BOLD COLOR_RED COLOR_GREEN COLOR_YELLOW COLOR_BLUE
 }
 
-enable_colors(){
-    # prefer terminal safe colored and bold text when tput is supported
-    if tput setaf 0 &>/dev/null; then
-        ALL_OFF="$(tput sgr0)"
-        BOLD="$(tput bold)"
-        RED="${BOLD}$(tput setaf 1)"
-        GREEN="${BOLD}$(tput setaf 2)"
-        YELLOW="${BOLD}$(tput setaf 3)"
-        BLUE="${BOLD}$(tput setaf 4)"
+enable_colors() {
+    if command -v tput &>/dev/null && tput setaf 0 &>/dev/null; then
+        COLOR_RESET="$(tput sgr0)"
+        COLOR_BOLD="$(tput bold)"
+        COLOR_RED="${COLOR_BOLD}$(tput setaf 1)"
+        COLOR_GREEN="${COLOR_BOLD}$(tput setaf 2)"
+        COLOR_YELLOW="${COLOR_BOLD}$(tput setaf 3)"
+        COLOR_BLUE="${COLOR_BOLD}$(tput setaf 4)"
     else
-        ALL_OFF="\e[0m"
-        BOLD="\e[1m"
-        RED="${BOLD}\e[31m"
-        GREEN="${BOLD}\e[32m"
-        YELLOW="${BOLD}\e[33m"
-        BLUE="${BOLD}\e[34m"
+        COLOR_RESET="\e[0m"
+        COLOR_BOLD="\e[1m"
+        COLOR_RED="${COLOR_BOLD}\e[31m"
+        COLOR_GREEN="${COLOR_BOLD}\e[32m"
+        COLOR_YELLOW="${COLOR_BOLD}\e[33m"
+        COLOR_BLUE="${COLOR_BOLD}\e[34m"
     fi
-    readonly ALL_OFF BOLD BLUE GREEN RED YELLOW
+    readonly COLOR_RESET COLOR_BOLD COLOR_RED COLOR_GREEN COLOR_YELLOW COLOR_BLUE
 }
 
-if [[ -t 2 ]]; then
-    enable_colors
-else
-    disable_colors
-fi
+[[ -t 2 ]] && enable_colors || disable_colors
 
-plain() {
-    local mesg=$1; shift
-    printf "${BOLD}    ${mesg}${ALL_OFF}\n" "$@" >&2
+log_plain()   { printf "%b\n" "${COLOR_BOLD}    $*${COLOR_RESET}" >&2; }
+log_success() { printf "%b\n" "${COLOR_GREEN}==>${COLOR_RESET}${COLOR_BOLD} $*${COLOR_RESET}" >&2; }
+log_note()    { printf "%b\n" "${COLOR_BLUE}  ->${COLOR_RESET}${COLOR_BOLD} $*${COLOR_RESET}" >&2; }
+log_info()    { printf "%b\n" "${COLOR_YELLOW} -->${COLOR_RESET}${COLOR_BOLD} $*${COLOR_RESET}" >&2; }
+log_warning() { printf "%b\n" "${COLOR_YELLOW}==> WARNING:${COLOR_RESET}${COLOR_BOLD} $*${COLOR_RESET}" >&2; }
+log_error()   { printf "%b\n" "${COLOR_RED}==> ERROR:${COLOR_RESET}${COLOR_BOLD} $*${COLOR_RESET}" >&2; }
+status_start() { printf "%b" "${COLOR_GREEN}==>${COLOR_RESET}${COLOR_BOLD} $*...${COLOR_RESET}" >&2; }
+status_done()  { printf "%b\n" "${COLOR_BOLD}done${COLOR_RESET}" >&2; }
+
+exit_cleanup() { exit "${1:-0}"; }
+
+abort_script() {
+    log_error 'Aborting...'
+    exit_cleanup 255
 }
 
-msg() {
-    local mesg=$1; shift
-    printf "${GREEN}==>${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+fatal_error() {
+    (( $# )) && log_error "$*"
+    exit_cleanup 255
 }
 
-msg2() {
-    local mesg=$1; shift
-    printf "${BLUE}  ->${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
-}
-
-info() {
-    local mesg=$1; shift
-    printf "${YELLOW} -->${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
-}
-
-warning() {
-    local mesg=$1; shift
-    printf "${YELLOW}==> WARNING:${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
-}
-
-error() {
-    local mesg=$1; shift
-    printf "${RED}==> ERROR:${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
-}
-
-stat_busy() {
-    local mesg=$1; shift
-    printf "${GREEN}==>${ALL_OFF}${BOLD} ${mesg}...${ALL_OFF}" >&2
-}
-
-stat_done() {
-    printf "${BOLD}done${ALL_OFF}\n" >&2
-}
-
-cleanup() {
-    exit ${1:-0}
-}
-
-abort() {
-    error 'Aborting...'
-    cleanup 255
-}
-
-die() {
-    (( $# )) && error "$@"
-    cleanup 255
-}
-
-import(){
-    if [[ -r $1 ]]; then
-        source $1
+import() {
+    local file="$1"
+    if [[ -r "$file" ]]; then
+        source $file
     else
-        die "Could not import $1"
+        fatal_error "Could not import '$file'"
     fi
 }

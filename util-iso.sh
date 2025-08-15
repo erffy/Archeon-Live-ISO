@@ -15,8 +15,8 @@ error_function() {
     fi
     # first exit all subshells, then print the error
     if (( ! BASH_SUBSHELL )); then
-        error "A failure occurred in %s()." "$1"
-        plain "Aborting..."
+        log_error "A failure occurred in %s()." "$1"
+        log_plain "Aborting..."
     fi
     umount_fs
     umount_img
@@ -49,7 +49,7 @@ check_umount() {
 
 trap_exit() {
     local sig=$1; shift
-    error "$@"
+    log_error "$@"
     umount_fs
     trap -- "$sig"
     kill "-$sig" "$$"
@@ -58,24 +58,24 @@ trap_exit() {
 modify_mkarchiso() {
     local _is_hack_applied="$(grep -q 'archlinux-keyring-wkd-sync.timer' /usr/bin/mkarchiso; echo $?)"
     if [ $_is_hack_applied -ne 0 ]; then
-        msg "Patching mkarchiso with disabled arch keyrings timer..."
+        log_success "Patching mkarchiso with disabled arch keyrings timer..."
 
         sudo sed 's/_run_once _make_customize_airootfs/_run_once _make_customize_airootfs\n\trm -f "${pacstrap_dir}\/usr\/lib\/systemd\/system\/timers.target.wants\/archlinux-keyring-wkd-sync.timer"\n/' -i /usr/bin/mkarchiso
     else
-        msg "mkarchiso is already patched!"
+        log_success "mkarchiso is already patched!"
     fi
 }
 
 prepare_profile(){
     profile=$1
 
-    info "Profile: [%s]" "${profile}"
+    log_info "Profile: [%s]" "${profile}"
 
     rm -f ${src_dir}/archeoniso/airootfs/etc/systemd/system/display-manager.service
     if [ "$profile" == "desktop" ]; then
         ln -sf /usr/lib/systemd/system/sddm.service ${src_dir}/archeoniso/airootfs/etc/systemd/system/display-manager.service
     else
-        die "Unknown profile: [%s]" "${profile}"
+        fatal_error "Unknown profile: [%s]" "${profile}"
     fi
 
     iso_file=$(gen_iso_fn).iso
@@ -85,24 +85,24 @@ run_build() {
     prepare_profile "$1"
     local _profile="$1"
 
-    msg "Prepare [work: ${work_dir}, out: ${outFolder}]"
+    log_success "Prepare [work: ${work_dir}, out: ${outFolder}]"
 
     if $verbose; then
-        msg2 "Making mkarchiso verbose"
+        log_note "Making mkarchiso verbose"
         sudo sed -i 's/quiet="y"/quiet="n"/g' /usr/bin/mkarchiso
     fi
 
     if $clean_first; then
-        msg2 "Deleting the build folder if one exists - takes some time"
+        log_note "Deleting the build folder if one exists - takes some time"
         umount_fs
         [ -d ${work_dir} ] && sudo rm -rf ${work_dir}
     fi
 
-    msg2 "Copying the Archiso folder to build work"
+    log_note "Copying the Archiso folder to build work"
     mkdir -p ${work_dir}
     cp -r archeoniso ${work_dir}/archeoniso
 
-    msg "Start [Build ISO]"
+    log_success "Start [Build ISO]"
 
     # insert removal of archlinux keyrings timer on the ISO before pack
     modify_mkarchiso
@@ -115,17 +115,17 @@ run_build() {
     cp ${work_dir}/iso/arch/pkglist.x86_64.txt "$outFolder/$_profile/$(gen_iso_fn).pkgs.txt"
     mv "$outFolder/$_profile/archeon-$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)-x86_64.iso" "$outFolder/$_profile/${iso_file}"
 
-    msg "Done [Build ISO] ${iso_file}"
-    msg "Finished building [%s]" "${_profile}"
+    log_success "Done [Build ISO] ${iso_file}"
+    log_success "Finished building [${_profile}]"
 
     cd "$outFolder/$_profile"
     for f in $(find . -maxdepth 1 -name '*.iso' | cut -d'/' -f2); do
         if [[ ! -e $f.sha256 ]]; then
-            create_chksums $f
+            create_checksums $f
         elif [[ $f -nt $f.sha256 ]]; then
-            create_chksums $f
+            create_checksums $f
         else
-            info "checksums for [$f] already created"
+            log_info "checksums for [$f] already created"
         fi
         if [[ ! -e $f.sig ]]; then
             sign_with_key $f
@@ -133,7 +133,7 @@ run_build() {
             rm $f.sig
             sign_with_key $f
         else
-            info "signature file for [$f] already created"
+            log_info "signature file for [$f] already created"
         fi
     done
     show_elapsed_time "${FUNCNAME}" "${timer_start}"
