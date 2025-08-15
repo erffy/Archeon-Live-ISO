@@ -18,7 +18,7 @@ jobs:
           docker run --rm --privileged \
             -v ${{ github.workspace }}:/work \
             -w /work \
-            archlinux:latest bash -c "chmod +x ./build.sh && ./build.sh"
+            archlinux:latest bash -c "pacman -Syu --needed git archiso squashfs-tools && chmod +x ./build.sh && ./build.sh"
 
       - name: Set release info
         id: set_release
