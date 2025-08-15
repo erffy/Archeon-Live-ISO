@@ -20,10 +20,7 @@ jobs:
             -w /work \
             archlinux:latest bash -c "
               pacman -Syu --noconfirm base-devel git archiso squashfs-tools &&
-              chmod +x ./buildiso.sh &&
-              ./buildiso.sh &&
-              cd out/desktop &&
-              for iso in *.iso; do sha256sum \"\$iso\" > \"\$iso.sha256\"; done
+              chmod +x ./buildiso.sh && ./buildiso.sh
             "
 
       - name: Set release info
@@ -41,3 +38,4 @@ jobs:
           files: |
             out/desktop/*.iso
             out/desktop/*.sha256
+            out/desktop/*.md5
