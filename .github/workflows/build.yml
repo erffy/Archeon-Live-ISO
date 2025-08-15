@@ -44,8 +44,4 @@ jobs:
           tag_name: ${{ steps.set_release.outputs.tag }}
           make_latest: true
           prerelease: ${{ steps.set_release.outputs.prerelease }}
-          files: |
-            out/desktop/*.iso
-            out/desktop/*.sha256
-            out/desktop/*.md5
-            out/desktop/*.txt
+          files: dist/desktop/*
