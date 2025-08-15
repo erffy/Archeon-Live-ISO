@@ -18,13 +18,7 @@ jobs:
           docker run --rm --privileged \
             -v ${{ github.workspace }}:/work \
             -w /work \
-            archlinux:latest bash -c "
-              pacman -Syu --noconfirm base-devel git archiso squashfs-tools &&
-              chmod +x ./buildiso.sh &&
-              ./buildiso.sh &&
-              cd out/desktop &&
-              for iso in *.iso; do sha256sum \"\$iso\" > \"\$iso.sha256\"; done
-            "
+            archlinux:latest bash -c "chmod +x ./build.sh && ./build.sh"
 
       - name: Set release info
         id: set_release
@@ -38,6 +32,4 @@ jobs:
           name: ${{ steps.set_release.outputs.title }}
           tag_name: ${{ steps.set_release.outputs.tag }}
           make_latest: true
-          files: |
-            out/desktop/*.iso
-            out/desktop/*.sha256
+          files: out/desktop/*

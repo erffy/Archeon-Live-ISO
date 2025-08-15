@@ -19,7 +19,7 @@ git clone https://github.com/erffy/Archeon-Live-ISO.git archeon && cd archeon
 #### 3. Build ISO
 
 ```bash
-sudo ./buildiso.sh
+./build.sh
 ```
 
 ### Notes
