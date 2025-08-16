@@ -19,8 +19,4 @@ file_permissions=(
   ["/etc/polkit-1/rules.d"]="0:0:750"
   ["/root"]="0:0:750"
   ["/usr/local/bin/switch-nm"]="0:0:755"
-  ["/etc/chromium"]="0:0:444"
-  ["/etc/chromium/policies"]="0:0:444"
-  ["/etc/chromium/policies/managed"]="0:0:444"
-  ["/etc/chromium/policies/managed/managed.json"]="0:0:444"
 )
