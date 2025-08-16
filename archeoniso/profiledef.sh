@@ -17,8 +17,10 @@ file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/etc/gshadow"]="0:0:400"
   ["/etc/polkit-1/rules.d"]="0:0:750"
-  ["/etc/sudoers.d"]="0:0:750"
-  ["/etc/sudoers.d/g_wheel"]="0:0:440"
   ["/root"]="0:0:750"
   ["/usr/local/bin/switch-nm"]="0:0:755"
+  ["/etc/chromium"]="0:0:444"
+  ["/etc/chromium/policies"]="0:0:444"
+  ["/etc/chromium/policies/managed"]="0:0:444"
+  ["/etc/chromium/policies/managed/managed.json"]="0:0:444"
 )
