@@ -76,28 +76,14 @@ create_checksums() {
   md5sum $file > $file.md5
 }
 
-prepare_profile() {
+buildiso() {
   log_info "Profile: [$BUILD_PROFILE]"
 
-  local sddm_path="${BASE_DIR}/archeoniso/airootfs/etc/systemd/system/display-manager.service"
+  local sddm_path="/usr/lib/systemd/system/sddm.service"
+  local sddm_target="${BASE_DIR}/archeoniso/airootfs/etc/systemd/system/display-manager.service"
 
   rm -f $sddm_path
-  [[ "$BUILD_PROFILE" = "desktop" ]] && ln -sf /usr/lib/systemd/system/sddm.service $sddm_path || fatal_error "Unknown profile: [$BUILD_PROFILE]"
-}
-
-modify_mkarchiso() {
-    local _is_hack_applied="$(grep -q 'archlinux-keyring-wkd-sync.timer' /usr/bin/mkarchiso; echo $?)"
-    if [ $_is_hack_applied -ne 0 ]; then
-        log_success "Patching mkarchiso with disabled arch keyrings timer..."
-
-        sed 's/_run_once _make_customize_airootfs/_run_once _make_customize_airootfs\n\trm -f "${pacstrap_dir}\/usr\/lib\/systemd\/system\/timers.target.wants\/archlinux-keyring-wkd-sync.timer"\n/' -i /usr/bin/mkarchiso
-    else
-        log_success "mkarchiso is already patched!"
-    fi
-}
-
-buildiso() {
-  prepare_profile
+  [[ "$BUILD_PROFILE" = "desktop" ]] && ln -sf $sddm_path $sddm_target || fatal_error "Unknown profile: [$BUILD_PROFILE]"
 
   log_success "Prepare [Build: ${BUILD_DIR}, Dist: ${DIST_DIR}]"
 
@@ -117,7 +103,11 @@ buildiso() {
 
   log_success "Start Build"
 
-  modify_mkarchiso
+  local _is_hack_applied="$(grep -q 'archlinux-keyring-wkd-sync.timer' /usr/bin/mkarchiso; echo $?)"
+  if [ $_is_hack_applied -ne 0 ]; then
+    log_success "Patching mkarchiso with disabled arch keyrings timer..."
+    sed 's/_run_once _make_customize_airootfs/_run_once _make_customize_airootfs\n\trm -f "${pacstrap_dir}\/usr\/lib\/systemd\/system\/timers.target.wants\/archlinux-keyring-wkd-sync.timer"\n/' -i /usr/bin/mkarchiso
+  fi
 
   [[ -d $DIST_DIR/$BUILD_PROFILE ]] || mkdir -p $DIST_DIR/$BUILD_PROFILE
 
