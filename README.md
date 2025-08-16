@@ -25,4 +25,4 @@ git clone https://github.com/erffy/Archeon-Live-ISO.git archeon && cd archeon
 ### Notes
 - Ensure you have sufficient disk space for building the ISO.
 - The build process may take some time depending on your system.
-- After building, the ISO will be located in the `out/` directory inside the repository.
+- After building, the ISO will be located in the `dist/` directory inside the repository.
